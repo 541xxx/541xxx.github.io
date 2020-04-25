@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="观察者模式和发布订阅者模式"/>
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Hexo">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/2020/04/25/observer-vs-pub-sub-design-pattern/"/>
+
+
+<meta name="description" content="虽然是很多时候容易弄混的两个设计模式，但其实还有有一定区别的。   Observer Design Pattern (观察者模式)  其中一个对象(Subject)维护其依赖项的列表（称为观察者），并且通常通过其调用方法之一来自动将状态更新告诉他们。 举个例子，比如你正在找一份前端开发的工作，然后联系了一名Google的HR，之后HR也留了你的联系方式并告诉你如果有任何JD会立即通知你。当然HR肯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="观察者模式和发布订阅者模式">
+<meta property="og:url" content="http://yoursite.com/2020/04/25/observer-vs-pub-sub-design-pattern/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="虽然是很多时候容易弄混的两个设计模式，但其实还有有一定区别的。   Observer Design Pattern (观察者模式)  其中一个对象(Subject)维护其依赖项的列表（称为观察者），并且通常通过其调用方法之一来自动将状态更新告诉他们。 举个例子，比如你正在找一份前端开发的工作，然后联系了一名Google的HR，之后HR也留了你的联系方式并告诉你如果有任何JD会立即通知你。当然HR肯">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/observer-vs-pub-sub-design-pattern/observer.png">
+<meta property="og:image" content="http://yoursite.com/images/observer-vs-pub-sub-design-pattern/pub-sub.gif">
+<meta property="og:image" content="http://yoursite.com/images/observer-vs-pub-sub-design-pattern/both.jpeg">
+<meta property="article:published_time" content="2020-04-25T04:17:29.587Z">
+<meta property="article:modified_time" content="2020-04-25T07:05:24.650Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/observer-vs-pub-sub-design-pattern/observer.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 观察者模式和发布订阅者模式 - Hexo </title>
+  <meta name="generator" content="Hexo 4.2.0"></head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Hexo</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          观察者模式和发布订阅者模式
+        
+      </h1>
+
+      <time class="post-time">
+          Apr 25 2020
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>虽然是很多时候容易弄混的两个设计模式，但其实还有有一定区别的。</p>
+<!-- ## Quick Start -->
+
+<h3 id="Observer-Design-Pattern-观察者模式"><a href="#Observer-Design-Pattern-观察者模式" class="headerlink" title="Observer Design Pattern (观察者模式)"></a>Observer Design Pattern (观察者模式)</h3><!-- 包含一个**Subject**（主题）或“被观察者”和一个Observer（观察者），观察者直接订阅主题，当主题里面的状态发生变化的时候会自动通知观察者。 -->
+
+<p>其中一个对象(<strong>Subject</strong>)维护其依赖项的列表（称为观察者），并且通常通过其调用方法之一来自动将状态更新告诉他们。</p>
+<p>举个例子，比如你正在找一份前端开发的工作，然后联系了一名Google的HR，之后HR也留了你的联系方式并告诉你如果有任何JD会立即通知你。当然HR肯定不止留了你一个人的联系方式，还有很多和你一样的候选人（<strong>Observer</strong>）。一旦有JD出来，HR会通知到所有的候选人。</p>
+<p>在以上的例子中，Google就是<strong>Subject</strong>，维护了所有的Observers（像你一样的求职者）, 然后会通知给所有的Observers特定的event（有JD啦）。</p>
+<p><img src="/images/observer-vs-pub-sub-design-pattern/observer.png" alt=""></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Observer 观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Developer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, position) &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.position = position;</span><br><span class="line">  &#125;</span><br><span class="line">  messageReceiving(position) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Hi <span class="subst">$&#123;<span class="keyword">this</span>.name&#125;</span>, there is a <span class="subst">$&#123;position&#125;</span> position avaliable for you.`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用来集中管理开发者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Developers</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.list = [];</span><br><span class="line">  &#125;</span><br><span class="line">  add(obj) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.list.push(obj);</span><br><span class="line">  &#125;</span><br><span class="line">  find(index) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.list[index];</span><br><span class="line">  &#125;</span><br><span class="line">  getCount() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.list.length;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Subject 主题或者被观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Google</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.developers = <span class="keyword">new</span> Developers();</span><br><span class="line">  &#125;</span><br><span class="line">  notify(position) &#123;</span><br><span class="line">    <span class="keyword">const</span> count = <span class="keyword">this</span>.developers.getCount();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">      <span class="keyword">this</span>.developers.find(i).messageReceiving(position);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  resumeReceving (obj) &#123;</span><br><span class="line">    <span class="keyword">this</span>.developers.add(obj);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> frontEnd = <span class="keyword">new</span> Developer(<span class="string">"Shawn"</span>, <span class="string">'Front-end'</span>);</span><br><span class="line"><span class="keyword">const</span> frontEnd2 = <span class="keyword">new</span> Developer(<span class="string">"Hayden"</span>, <span class="string">'Front-end'</span>);</span><br><span class="line"><span class="keyword">const</span> Google2 = <span class="keyword">new</span> Google();</span><br><span class="line">Google2.resumeReceving(frontEnd);</span><br><span class="line">Google2.resumeReceving(frontEnd2);</span><br><span class="line">Google2.notify(<span class="string">"Front-end"</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Pub-sub-Design-Pattern"><a href="#Pub-sub-Design-Pattern" class="headerlink" title="Pub-sub Design Pattern"></a>Pub-sub Design Pattern</h3><p>在发布订阅者模式中，<strong>Publisher</strong> 和观察者模式中的<strong>Subject</strong>类似，<strong>Subscriber</strong>和观察者模式中的<strong>Observer</strong>几乎是同一个意思。</p>
+<p>在发布订阅者模式中，订阅者和发布者不会直接交流，而是通过一个叫<strong>Event Channel</strong>（事件调度中心）来对事件进行统一管理。</p>
+<p>这样的好处是可以避免订阅者和发布者产生依赖关系，也就是我们常说的<strong>解耦</strong>。</p>
+<p><img src="/images/observer-vs-pub-sub-design-pattern/pub-sub.gif" alt=""></p>
+<p>举个例子：</p>
+<p>谷歌(<strong>Publisher</strong>)会把工作发布到一个名叫CEO直聘(<strong>Event Channel</strong>)的工作平台上，开发者也可以在这个平台上找工作，如果他们对Google特别感兴趣，可以直接在这个平台上订阅谷歌的职位消息，一旦谷歌发布了职位，平台就会通知到已经订阅的(<strong>Subscribers</strong>)开发者。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Publisher 发布者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JobSeeking</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.companies = [];</span><br><span class="line">    <span class="keyword">this</span>.uid = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// company 可以看作为 eventType 事件类型</span></span><br><span class="line">  <span class="comment">// 发布</span></span><br><span class="line">  emit(company, position) &#123;</span><br><span class="line">    <span class="keyword">let</span> subscribers = <span class="keyword">this</span>.companies[company];</span><br><span class="line">    <span class="keyword">if</span> (!subscribers) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> count = subscribers.length;</span><br><span class="line">    <span class="keyword">while</span> (count--) &#123;</span><br><span class="line">      <span class="keyword">let</span> subscriber = subscribers[count];</span><br><span class="line">      subscriber.handler(company, subscriber.id, position)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 订阅</span></span><br><span class="line">  on(company, handler) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.companies[company]) &#123;</span><br><span class="line">      <span class="keyword">this</span>.companies[company] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> id = ++<span class="keyword">this</span>.uid;</span><br><span class="line">    <span class="keyword">this</span>.companies[company].push(&#123;</span><br><span class="line">      id,</span><br><span class="line">      handler</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> id;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> manager = <span class="keyword">new</span> JobSeeking();</span><br><span class="line"></span><br><span class="line">manager.on(<span class="string">'Google'</span>, (company, id, position) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Hi No.<span class="subst">$&#123;id&#125;</span>, <span class="subst">$&#123;company&#125;</span> has published a new <span class="subst">$&#123;position&#125;</span> posion.`</span>);</span><br><span class="line">&#125;);</span><br><span class="line">manager.on(<span class="string">'Microsoft'</span>, (company, id, position) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Hi No.<span class="subst">$&#123;id&#125;</span>, <span class="subst">$&#123;company&#125;</span> has published a new <span class="subst">$&#123;position&#125;</span> posion.`</span>);</span><br><span class="line">&#125;);</span><br><span class="line">manager.emit(<span class="string">'Google'</span>, <span class="string">'Front-end'</span>);</span><br><span class="line">manager.emit(<span class="string">'Microsoft'</span>, <span class="string">'Front-end'</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="两者对比"><a href="#两者对比" class="headerlink" title="两者对比"></a>两者对比</h3><p><img src="/images/observer-vs-pub-sub-design-pattern/both.jpeg" alt=""></p>
+<p>观察者模式是紧密耦合，简单直接，扩展性差。<br>发布订阅者模式松散耦合，两者不产生依赖，易于扩展。</p>
+<p>两者有一个非常大的语义区别：发布订阅者模式只关于与<strong>Broadcasting</strong>事件广播，发布者也不需要知道事件最终去了哪里以及谁订阅了这些事件。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2020
+    <span class="footer-author">John Doe.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear" target="_blank" rel="noopener">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
