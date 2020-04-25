@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 541’s Space
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
+author: Shawn Wu
 language: en
 timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: https://541xxx.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -60,6 +60,12 @@ index_generator:
   path: ''
   per_page: 10
   order_by: -date
+
+archive_generator:
+  per_page: 0
+  yearly: false
+  monthly: false
+  daily: false  
 
 # Category & Tag
 default_category: uncategorized
