@@ -1,5 +1,8 @@
 ---
 title: 观察者模式和发布订阅者模式
+tags:
+- JavaScript
+- Design Pattern
 ---
 虽然是很多时候容易弄混的两个设计模式，但其实还有有一定区别的。
 
