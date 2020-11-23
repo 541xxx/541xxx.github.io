@@ -1,6 +1,5 @@
 ---
 title: Typescript 进阶
-date: 2020-11-20 15:18:06
 tags:
 - Typescript
 - JavaScript
