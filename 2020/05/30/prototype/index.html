@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="JavaScript原型到原型链"/>
+
+
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="541’s Space">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="https://541xxx.github.io/2020/05/30/prototype/"/>
+
+
+<meta name="description" content="构造函数创建对象123456function Person() &amp;#123;&amp;#125;var person &#x3D; new Person();person.name &#x3D; &#39;Kevin&#39;;console.log(person.name) &#x2F;&#x2F; Kevin 在上述例子中， Person 就是一个构造函数，我们使用new创建了一个实例对象person。 prototype每个函数都有一个prototype">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript原型到原型链">
+<meta property="og:url" content="https://541xxx.github.io/2020/05/30/prototype/index.html">
+<meta property="og:site_name" content="541’s Space">
+<meta property="og:description" content="构造函数创建对象123456function Person() &amp;#123;&amp;#125;var person &#x3D; new Person();person.name &#x3D; &#39;Kevin&#39;;console.log(person.name) &#x2F;&#x2F; Kevin 在上述例子中， Person 就是一个构造函数，我们使用new创建了一个实例对象person。 prototype每个函数都有一个prototype">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://541xxx.github.io/images/prototype/prototype1.png">
+<meta property="og:image" content="https://541xxx.github.io/images/prototype/prototype2.png">
+<meta property="og:image" content="https://541xxx.github.io/images/prototype/prototype3.png">
+<meta property="og:image" content="https://541xxx.github.io/images/prototype/prototype4.png">
+<meta property="og:image" content="https://541xxx.github.io/images/prototype/prototype5.png">
+<meta property="article:published_time" content="2020-05-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-01T08:00:31.813Z">
+<meta property="article:author" content="Shawn Wu">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://541xxx.github.io/images/prototype/prototype1.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> JavaScript原型到原型链 - 541’s Space </title>
+  <meta name="generator" content="Hexo 4.2.0"></head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">541’s Space</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          JavaScript原型到原型链
+        
+      </h1>
+
+      <time class="post-time">
+          May 30 2020
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h3 id="构造函数创建对象"><a href="#构造函数创建对象" class="headerlink" title="构造函数创建对象"></a>构造函数创建对象</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line">person.name = <span class="string">'Kevin'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(person.name) <span class="comment">// Kevin</span></span><br></pre></td></tr></table></figure>
+<p>在上述例子中， <strong>Person</strong> 就是一个构造函数，我们使用<strong>new</strong>创建了一个实例对象person。</p>
+<h3 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h3><p>每个函数都有一个prototype属性（注意是函数才有），比如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">Person.prototype.name = <span class="string">'Kevin'</span>;</span><br><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(person.name) <span class="comment">// Kevin</span></span><br></pre></td></tr></table></figure>
+<p>函数的<strong>prototype</strong>属性指向了一个对象，这个对象是调用该函数而创建的<strong>实例</strong>的原型，这样说可能会有点绕，实例是指<strong>person</strong>，也就是<strong>person</strong>的原型。</p>
+<p>那什么是原型呢？你可以这样理解：每一个<strong>JavaScript</strong>对象(null除外)在创建的时候就会与之关联另一个对象，这个对象就是我们所说的原型，每一个对象都会从原型”继承”属性。</p>
+<p>让我们用一张图表示构造函数和实例原型之间的关系：</p>
+<p><img src="/images/prototype/prototype1.png" alt=""></p>
+<p>在这张图中我们用<strong>Object.prototype</strong>表示实例原型。</p>
+<p>那么我们该怎么表示实例与实例原型，也就是 <strong>person</strong> 和 <strong>Person.prototype</strong> 之间的关系呢，这时候我们就要讲到第二个属性：</p>
+<h3 id="proto"><a href="#proto" class="headerlink" title="__proto__"></a>__proto__</h3><p>这是每一个<strong>JavaScript</strong>对象(除了 <strong>null</strong> )都具有的一个属性，叫<strong>__proto__</strong>，这个属性会指向该对象的原型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(person.__proto__ === Person.prototype); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>更新关系图</p>
+<p><img src="/images/prototype/prototype2.png" alt=""></p>
+<p>既然实例对象和构造函数都可以指向原型，那么原型是否有属性指向构造函数或者实例呢？</p>
+<h3 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h3><p>指向实例倒是没有，因为一个构造函数可以生成多个实例，但是原型指向构造函数倒是有的，<br>这就要讲到第三个属性：<strong>constructor</strong>，<br>每个原型都有一个<strong>constructor</strong> 属性指向关联的构造函数。<br>为了验证这一点，我们可以尝试：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(Person === Person.prototype.constructor); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>更新关系图</p>
+<p><img src="/images/prototype/prototype3.png" alt=""></p>
+<p>综上我们已经得出：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(person.__proto__ == Person.prototype) <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(Person.prototype.constructor == Person) <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 顺便学习一个ES5的方法,可以获得对象的原型</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getPrototypeOf(person) === Person.prototype) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>了解了构造函数、实例原型、和实例之间的关系，接下来我们讲讲实例和原型的关系：</p>
+<p><strong>实例与原型</strong></p>
+<p>当读取实例的属性时，如果找不到，就会查找与对象关联的原型中的属性，如果还查不到，就去找原型的原型，一直找到最顶层为止。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.name = <span class="string">'Kevin'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"></span><br><span class="line">person.name = <span class="string">'Daisy'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(person.name) <span class="comment">// Daisy</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> person.name;</span><br><span class="line"><span class="built_in">console</span>.log(person.name) <span class="comment">// Kevin</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，我们给实例对象 <strong>person</strong> 添加了 <strong>name</strong> 属性，当我们打印 <strong>person.name</strong> 的时候，结果自然为 Daisy。</p>
+<p>但是当我们删除了 <strong>person</strong> 的 <strong>name</strong> 属性时，读取 <strong>person.name</strong>，从 <strong>person</strong> 对象中找不到 <strong>name</strong> 属性就会从 <strong>person</strong> 的原型也就是 <strong>person</strong>.__proto__ ，也就是 <strong>Person.prototype</strong>中查找，幸运的是我们找到了 name 属性，结果为 Kevin。</p>
+<p>但是万一还没有找到呢？原型的原型又是什么呢？</p>
+<h3 id="原型的原型"><a href="#原型的原型" class="headerlink" title="原型的原型"></a>原型的原型</h3><p>在前面，我们已经讲了原型也是一个对象，既然是对象，我们就可以用最原始的方式创建它，那就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">obj.name = <span class="string">'Kevin'</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// Kevin</span></span><br></pre></td></tr></table></figure>
+<p>其实原型对象就是通过 <strong>Object</strong> 构造函数生成的，结合之前所讲，实例的 __proto__ 指向构造函数的 <strong>prototype</strong> ，所以我们再更新下关系图：</p>
+<p><img src="/images/prototype/prototype4.png" alt=""></p>
+<h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><p>那 Object.prototype 的原型呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.__proto__ === <span class="literal">null</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Object.prototype.__proto__</strong>的值为 <strong>null</strong> 跟 <strong>Object.prototype</strong> 没有原型，其实表达了同一个意思。</p>
+<p>所以查找属性的时候查到 <strong>Object.prototype</strong> 就可以停止查找了。</p>
+<p>最后一张关系图也可以更新为：</p>
+<p><img src="/images/prototype/prototype5.png" alt=""></p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>有三点不容易注意的地方</p>
+<p>首先是<strong>constructor</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(person.constructor === Person); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>当获取 <strong>person.constructor</strong> 时，其实 <strong>person</strong> 中并没有 <strong>constructor</strong> 属性,当不能读取到<strong>constructor</strong> 属性时，会从 <strong>person</strong> 的原型也就是 <strong>Person.prototype</strong> 中读取，正好原型中有该属性，所以：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">person.constructor === Person.prototype.constructor</span><br></pre></td></tr></table></figure>
+
+<p>其次是<strong>__proto__</strong></p>
+<p>绝大部分浏览器都支持这个非标准的方法访问原型，然而它并不存在于 <strong>Person.prototype</strong> 中，实际上，它是来自于 <strong>Object.prototype</strong> ，与其说是一个属性，不如说是一个 <strong>getter/setter</strong>，当使用 <strong>obj.__proto__</strong> 时，可以理解成返回了 <strong>Object.getPrototypeOf(obj)</strong>。</p>
+<p>真的是继承吗？</p>
+<p>最后是关于继承，前面我们讲到“每一个对象都会从原型‘继承’属性”，实际上，继承是一个十分具有迷惑性的说法，引用《你不知道的JavaScript》中的话，就是：<br>继承意味着复制操作，然而 JavaScript 默认并不会复制对象的属性，相反，JavaScript 只是在两个对象之间创建一个关联，这样，一个对象就可以通过委托访问另一个对象的属性和函数，所以与其叫继承，委托的说法反而更准确些。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/JavaScript/">JavaScript</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/11/20/advanced-typescript/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Typescript 进阶</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/04/25/observer-vs-pub-sub-design-pattern/">
+        <span class="next-text nav-default">观察者模式和发布订阅者模式</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2020
+    <span class="footer-author">Shawn Wu.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear" target="_blank" rel="noopener">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
